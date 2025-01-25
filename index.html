@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pet Behaviors with Interfaces</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 1rem;
+      }
+      h1,
+      h2,
+      h3 {
+        color: #2c3e50;
+        margin-top: 2rem;
+      }
+      pre {
+        background: #f8f9fa;
+        border-radius: 4px;
+        padding: 1rem;
+        overflow-x: auto;
+        border: 1px solid #e9ecef;
+        width: calc(100% - 2rem);
+      }
+      .keyword {
+        color: #0033b3;
+      }
+      .string {
+        color: #067d17;
+      }
+      .comment {
+        color: #8c8c8c;
+      }
+      .number {
+        color: #1750eb;
+      }
+      .type {
+        color: #000080;
+      }
+      .tip {
+        background: #e3f2fd;
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+      }
+      .warning {
+        background: #fff3e0;
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Making Our Pets More Interactive! 🎮</h1>
+
+    <p>Take a look at our current Dog class. We have this trainFetch() method:</p>
+
+    <pre><span class="keyword">public class</span> Dog <span class="keyword">extends</span> Pet {
+    <span class="keyword">private boolean</span> knowsFetch = <span class="keyword">false</span>;
+
+    <span class="keyword">public void</span> trainFetch() {
+        knowsFetch = <span class="keyword">true</span>;
+        setMood(<span class="string">"happy"</span>);
+        System.out.println(getName() + <span class="string">" learned how to fetch!"</span>);
+    }
+}</pre>
+
+    <div class="warning">
+      <strong>The Problem:</strong> What if a cat learns to fetch? Or a bird? 🤔
+      <br />
+      Right now, only dogs can learn to fetch because the method is locked in the Dog class!
+    </div>
+
+    <h2>Enter Interfaces: Teaching New Tricks! 🎓</h2>
+
+    <p>Let's create an interface that any pet can implement if they can learn to fetch:</p>
+
+    <pre><span class="keyword">public interface</span> FetchCapable {
+    <span class="keyword">void</span> trainFetch();
+    <span class="keyword">boolean</span> knowsFetch();
+}</pre>
+
+    <p>Now let's try to use it with our Dog class:</p>
+
+    <pre><span class="keyword">public class</span> Dog <span class="keyword">extends</span> Pet {
+    <span class="keyword">private boolean</span> knowsFetch = <span class="keyword">false</span>;
+    
+    <span class="comment">// Other Dog code...</span>
+}</pre>
+
+    <div class="tip">
+      <strong>Try it!</strong> Create a Dog that implements FetchCapable. The compiler will help show us what we need to
+      do! 💡
+    </div>
+
+    <p>When you add <code class="keyword">implements FetchCapable</code> to the Dog class...</p>
+
+    <pre><span class="keyword">public class</span> Dog <span class="keyword">extends</span> Pet <span class="keyword">implements</span> FetchCapable {
+    <span class="keyword">private boolean</span> knowsFetch = <span class="keyword">false</span>;
+}</pre>
+
+    <p>...you'll get some helpful compiler errors! 🚨</p>
+
+    <div class="warning">
+      <strong>Error:</strong> Class 'Dog' must implement methods 'trainFetch()' and 'knowsFetch()'
+      <br />
+      This is good! The compiler is helping us remember what we need to implement! 🤝
+    </div>
+
+    <p>Let's fix those errors by implementing the required methods:</p>
+
+    <pre><span class="keyword">public class</span> Dog <span class="keyword">extends</span> Pet <span class="keyword">implements</span> FetchCapable {
+    <span class="keyword">private boolean</span> knowsFetch = <span class="keyword">false</span>;
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">public void</span> trainFetch() {
+        knowsFetch = <span class="keyword">true</span>;
+        setMood(<span class="string">"happy"</span>);
+        System.out.println(getName() + <span class="string">" learned how to fetch!"</span>);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">public boolean</span> knowsFetch() {
+        <span class="keyword">return</span> knowsFetch;
+    }
+}</pre>
+
+    <div class="tip">
+      <strong>Notice:</strong>
+      <ul>
+        <li>We use @Override to show we're implementing interface methods</li>
+        <li>The compiler made sure we didn't forget any methods</li>
+        <li>Now any pet class can implement FetchCapable!</li>
+      </ul>
+    </div>
+
+    <h2>Let's Create a Smart Cat! 🐱</h2>
+
+    <p>Maybe we have a special cat that can learn to fetch too:</p>
+
+    <pre><span class="keyword">public class</span> Cat <span class="keyword">extends</span> Pet <span class="keyword">implements</span> FetchCapable {
+    <span class="keyword">private boolean</span> knowsFetch = <span class="keyword">false</span>;
+    
+    <span class="annotation">@Override</span>
+    <span class="keyword">public void</span> trainFetch() {
+        <span class="comment">// Cats might need extra motivation! 😺</span>
+        <span class="keyword">if</span> (getMood().equals(<span class="string">"happy"</span>)) {
+            knowsFetch = <span class="keyword">true</span>;
+            System.out.println(getName() + 
+                <span class="string">" gracefully learns to fetch (when they feel like it)!"</span>);
+        } <span class="keyword">else</span> {
+            System.out.println(getName() + <span class="string">" ignores the training attempt."</span>);
+        }
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">public boolean</span> knowsFetch() {
+        <span class="keyword">return</span> knowsFetch;
+    }
+}</pre>
+
+    <h2>Testing Our Fetch-Capable Pets! 🎯</h2>
+
+    <p>Let's create some pets and try out our new interface:</p>
+
+    <pre><span class="keyword">public static void</span> main(String[] args) {
+    Dog buddy = <span class="keyword">new</span> Dog(<span class="string">"Buddy"</span>, <span class="number">3</span>);
+    Cat whiskers = <span class="keyword">new</span> Cat(<span class="string">"Whiskers"</span>, <span class="number">5</span>);
+    
+    <span class="comment">// Try to use trainFetch directly</span>
+    buddy.trainFetch();     <span class="comment">// This works!</span>
+    whiskers.trainFetch();  <span class="comment">// This works too!</span>
+}</pre>
+
+    <div class="warning">
+      <strong>But wait!</strong> What if we want to check if a pet can fetch before trying to train them? 🤔
+    </div>
+
+    <h2>Safe Type Checking with Interfaces 🔍</h2>
+
+    <p>Java gives us a special way to check if an object implements an interface:</p>
+
+    <pre><span class="keyword">public static void</span> tryToTrain(Pet pet) {
+    <span class="keyword">if</span> (pet <span class="keyword">instanceof</span> FetchCapable) {
+        <span class="comment">// We know this pet can learn to fetch!</span>
+        FetchCapable fetchPet = (FetchCapable) pet;  <span class="comment">// Safe casting</span>
+        fetchPet.trainFetch();
+    } <span class="keyword">else</span> {
+        System.out.println(pet.getName() + <span class="string">" cannot learn to fetch."</span>);
+    }
+}</pre>
+
+    <div class="tip">
+      <strong>Watch This:</strong> Try removing the instanceof check and the compiler will warn you! It's helping
+      prevent runtime errors! 🛡️
+    </div>
+
+    <h2>Making Training More Interactive 🎮</h2>
+
+    <p>Let's create a training session system:</p>
+
+    <pre><span class="keyword">public class</span> TrainingSession {
+    <span class="keyword">public static void</span> trainPet(Pet pet) {
+        System.out.println(<span class="string">"🎓 Training Session for "</span> + pet.getName());
+        
+        <span class="keyword">if</span> (pet <span class="keyword">instanceof</span> FetchCapable) {
+            System.out.println(<span class="string">"Teaching fetch..."</span>);
+            FetchCapable fetchPet = (FetchCapable) pet;
+            
+            <span class="keyword">if</span> (!fetchPet.knowsFetch()) {
+                fetchPet.trainFetch();
+            } <span class="keyword">else</span> {
+                System.out.println(pet.getName() + 
+                    <span class="string">" already knows how to fetch!"</span>);
+            }
+        }
+        
+        System.out.println(<span class="string">"Training session complete!\n"</span>);
+    }
+}</pre>
+
+    <h2>Let's Try It Out! 🎯</h2>
+
+    <pre><span class="keyword">public static void</span> main(String[] args) {
+    <span class="comment">// Create some pets</span>
+    Dog buddy = <span class="keyword">new</span> Dog(<span class="string">"Buddy"</span>, <span class="number">3</span>);
+    Cat whiskers = <span class="keyword">new</span> Cat(<span class="string">"Whiskers"</span>, <span class="number">5</span>);
+    Fish nemo = <span class="keyword">new</span> Fish(<span class="string">"Nemo"</span>, <span class="number">1</span>, WaterType.SALTWATER);
+    
+    <span class="comment">// Try training each pet</span>
+    TrainingSession.trainPet(buddy);     <span class="comment">// Can learn fetch!</span>
+    TrainingSession.trainPet(whiskers);  <span class="comment">// Can learn too!</span>
+    TrainingSession.trainPet(nemo);      <span class="comment">// Cannot learn fetch</span>
+    
+    <span class="comment">// Try training Buddy again</span>
+    TrainingSession.trainPet(buddy);  <span class="comment">// Already knows fetch!</span>
+}</pre>
+
+    <h2>Practice Challenge: Trick Training! 💪</h2>
+
+    <p>Create a new <code>TrickCapable</code> interface:</p>
+
+    <pre><span class="keyword">public interface</span> TrickCapable {
+    <span class="keyword">void</span> learnTrick(String trickName);
+    List&lt;String&gt; getKnownTricks();
+}</pre>
+
+    <p>Your tasks:</p>
+    <ol>
+      <li>Implement TrickCapable in Dog and Cat classes</li>
+      <li>Add a List to store known tricks</li>
+      <li>Create a training system for tricks</li>
+      <li>Make sure the compiler helps you implement everything!</li>
+    </ol>
+
+    <h2>Putting It All Together: Pet Training Center! 🎪</h2>
+
+    <p>Now that we have pets that can learn different things, let's create a complete training system!</p>
+
+    <pre><span class="keyword">public class</span> PetTrainingCenter {
+    <span class="keyword">public static void</span> evaluatePetCapabilities(Pet pet) {
+        System.out.println(<span class="string">\n"🔍 Evaluating "</span> + pet.getName() + 
+                         <span class="string">"'s capabilities:"</span>);
+        
+        <span class="comment">// Check fetch capability</span>
+        <span class="keyword">if</span> (pet <span class="keyword">instanceof</span> FetchCapable) {
+            System.out.println(<span class="string">"- Can learn to fetch"</span>);
+        }
+        
+        <span class="comment">// Check trick capability</span>
+        <span class="keyword">if</span> (pet <span class="keyword">instanceof</span> TrickCapable) {
+            System.out.println(<span class="string">"- Can learn tricks"</span>);
+            TrickCapable trickPet = (TrickCapable) pet;
+            
+            List&lt;String&gt; knownTricks = trickPet.getKnownTricks();
+            <span class="keyword">if</span> (!knownTricks.isEmpty()) {
+                System.out.println(<span class="string">"  Known tricks: "</span> + 
+                    String.join(<span class="string">", "</span>, knownTricks));
+            }
+        }
+    }
+
+    <span class="keyword">public static void</span> conductTrainingSession(Pet pet) {
+        System.out.println(<span class="string">"\n🎓 Starting training session for "</span> + 
+                         pet.getName());
+        
+        <span class="keyword">if</span> (pet <span class="keyword">instanceof</span> FetchCapable) {
+            FetchCapable fetchPet = (FetchCapable) pet;
+            <span class="keyword">if</span> (!fetchPet.knowsFetch()) {
+                fetchPet.trainFetch();
+            }
+        }
+        
+        <span class="keyword">if</span> (pet <span class="keyword">instanceof</span> TrickCapable) {
+            TrickCapable trickPet = (TrickCapable) pet;
+            <span class="comment">// Teach a new trick if they don't know it yet</span>
+            trickPet.learnTrick(<span class="string">"sit"</span>);
+            trickPet.learnTrick(<span class="string">"roll over"</span>);
+        }
+    }
+}</pre>
+
+    <div class="tip">
+      <strong>Notice:</strong> We're using instanceof checks to safely work with each capability. The compiler makes
+      sure we cast correctly! 🛡️
+    </div>
+
+    <h2>Advanced Feature: Training Reports! 📊</h2>
+
+    <p>Let's add a way to track training progress:</p>
+
+    <pre><span class="keyword">public class</span> TrainingReport {
+    <span class="keyword">private</span> Pet pet;
+    <span class="keyword">private</span> List&lt;String&gt; completedTraining = <span class="keyword">new</span> ArrayList&lt;&gt;();
+
+    <span class="keyword">public</span> TrainingReport(Pet pet) {
+        <span class="keyword">this</span>.pet = pet;
+    }
+
+    <span class="keyword">public void</span> updateReport() {
+        <span class="comment">// Check fetch training</span>
+        <span class="keyword">if</span> (pet <span class="keyword">instanceof</span> FetchCapable) {
+            FetchCapable fetchPet = (FetchCapable) pet;
+            <span class="keyword">if</span> (fetchPet.knowsFetch()) {
+                completedTraining.add(<span class="string">"Fetch Training"</span>);
+            }
+        }
+
+        <span class="comment">// Check trick training</span>
+        <span class="keyword">if</span> (pet <span class="keyword">instanceof</span> TrickCapable) {
+            TrickCapable trickPet = (TrickCapable) pet;
+            <span class="keyword">for</span> (String trick : trickPet.getKnownTricks()) {
+                completedTraining.add(<span class="string">"Trick: "</span> + trick);
+            }
+        }
+    }
+
+    <span class="keyword">public void</span> displayReport() {
+        System.out.println(<span class="string">"\n📋 Training Report for "</span> + pet.getName());
+        <span class="keyword">if</span> (completedTraining.isEmpty()) {
+            System.out.println(<span class="string">"No training completed yet!"</span>);
+        } <span class="keyword">else</span> {
+            System.out.println(<span class="string">"Completed Training:"</span>);
+            <span class="keyword">for</span> (String training : completedTraining) {
+                System.out.println(<span class="string">"- "</span> + training);
+            }
+        }
+    }
+}</pre>
+
+    <h2>Final Challenge: Build a Complete Training Program! 🏆</h2>
+
+    <p>Create a program that:</p>
+    <ol>
+      <li>Creates different types of pets</li>
+      <li>Evaluates their capabilities</li>
+      <li>Conducts training sessions</li>
+      <li>Generates training reports</li>
+    </ol>
+
+    <pre><span class="keyword">public static void</span> main(String[] args) {
+    <span class="comment">// Create some pets</span>
+    Dog buddy = <span class="keyword">new</span> Dog(<span class="string">"Buddy"</span>, <span class="number">3</span>);
+    Cat whiskers = <span class="keyword">new</span> Cat(<span class="string">"Whiskers"</span>, <span class="number">5</span>);
+    Fish nemo = <span class="keyword">new</span> Fish(<span class="string">"Nemo"</span>, <span class="number">1</span>, WaterType.SALTWATER);
+
+    <span class="comment">// Create training reports</span>
+    TrainingReport buddyReport = <span class="keyword">new</span> TrainingReport(buddy);
+    TrainingReport whiskersReport = <span class="keyword">new</span> TrainingReport(whiskers);
+
+    <span class="comment">// TODO: Complete the training program!</span>
+    <span class="comment">// 1. Evaluate each pet</span>
+    <span class="comment">// 2. Conduct training sessions</span>
+    <span class="comment">// 3. Update and display reports</span>
+}</pre>
+
+    <div class="warning">
+      <strong>Remember:</strong> Let the compiler guide you! If you try to use a capability without checking, it will
+      remind you to add the safety checks! 🛡️
+    </div>
+
+    <h2>What We've Learned 🎓</h2>
+
+    <ul>
+      <li>How interfaces define capabilities</li>
+      <li>Using instanceof for safe type checking</li>
+      <li>Letting compiler errors guide development</li>
+      <li>Building flexible pet behaviors</li>
+      <li>Creating complete training systems</li>
+    </ul>
+
+    <p>Next up: We'll learn about more interfaces and how they can work together! 🚀</p>
+  </body>
+</html>
